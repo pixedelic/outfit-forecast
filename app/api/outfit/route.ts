@@ -5,7 +5,7 @@ const client = new Anthropic({
 })
 
 export async function POST(request: Request) {
-    const { location, lat, lon, startDateStr, endDateStr } = await request.json()
+    const { location, lat, lon, startDateStr, endDateStr, wardrobe, style } = await request.json()
 
     let latitude: string, longitude: string, name: string, country: string
 
@@ -30,15 +30,13 @@ export async function POST(request: Request) {
     )
     const weatherData = await weatherResponse.json()
 
-    console.log('weatherData: ' + JSON.stringify(weatherData));
-
     const message = await client.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 2048,
     messages: [
         {
             role: 'user',
-            content: `Based on the following weather forecast for ${name}, ${country}, return a JSON object with this exact structure:
+            content: `Based on the following weather forecast for ${name}, ${country}, return a JSON object with this exact structure and suggest outfits for a ${wardrobe} wardrobe in a ${style} style:
     {
     "days": [
         {

@@ -2,7 +2,7 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Calendar } from '@/components/ui/calendar'
 import { format } from 'date-fns'
-import { X } from 'lucide-react'
+import { X, Calendar as CalendIcon } from 'lucide-react'
 
 type DatePickerProps = {
     value: Date | undefined
@@ -26,12 +26,13 @@ export default function DatePicker({
                 <div className="flex items-center gap-2">
                     <button 
                         type="button"
-                        className="p-0 border-0 text-3xl text-left w-full focus:outline-none"
+                        className="p-0 border-0 text-3xl! text-left w-full focus:outline-none flex justify-between items-center"
                         disabled={disabled}
                         aria-label={label}>
                             {value ? format(value, 'MMM d, yyyy') : <span className="text-muted-foreground">Pick a date</span>}
+                        
                     </button>
-                    {value && (
+                    {value ? (
                         <button 
                             type="button" 
                             onClick={() => onChange(undefined)}
@@ -39,7 +40,7 @@ export default function DatePicker({
                         >
                             <X className="w-4 h-4" />
                         </button>
-                    )}
+                    ) : <CalendIcon className="stroke-[var(--accent)] w-4" />}
                 </div>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">

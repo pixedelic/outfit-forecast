@@ -9,6 +9,15 @@ import { type NominatimResult } from '@/types/location'
 import DatePicker from '@/components/DatePicker'
 import WeatherAdvice from '@/components/WeatherAdvice'
 import { type WeatherAdvice as WeatherAdviceType } from '@/types/advice'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function OutfitForm() {
   const [isLoading, setIsLoading] = useState(false)
@@ -32,6 +41,8 @@ export default function OutfitForm() {
   const currentDate = new Date()
   const maxDate = new Date()
   maxDate.setDate(currentDate.getDate() + 16)
+  const [wardrobe, setWardrobe] = useState('unisex')
+  const [style, setStyle] = useState('casual')
 
   const fetchSuggestions = async (value: string) => {
       setLocation(value)
@@ -80,7 +91,7 @@ export default function OutfitForm() {
       const response = await fetch('/api/outfit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ location, lat, lon, startDateStr, endDateStr })
+          body: JSON.stringify({ location, lat, lon, startDateStr, endDateStr, wardrobe, style })
       })
 
       if (!response.ok) {
@@ -127,59 +138,97 @@ export default function OutfitForm() {
             A weather-aware <strong>outfit dossier</strong>. Type where you&apos;re going, pick the days, get a styled look the sky won&apos;t ruin.
           </p>
         </div>
-        <form className="grid grid-cols-[2fr_1fr_1fr_auto] border-y border-current/30 divide-x" onSubmit={handleSubmit}>
-          <div className="text-sm text-[var(--ink-soft)] p-5 relative border-current/30">
-            <Label htmlFor="location" className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
-              <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">1</span>{errorLocation ? <span className="text-red-500">{errorLocation}</span> : "Destination"}<sup>(*)</sup>
-            </Label>
-            <Input 
-              name="location" 
-              id="location" 
-              value={location}
-              onChange={(e) => fetchSuggestions(e.target.value)}
-              autoComplete="off"
-              placeholder="Enter city or location" 
-              className="p-0 border-0 rounded-none text-3xl! focus:outline-none focus:ring-0!" 
-            />
-            {showSuggestions && (
-                <LocationSuggestions
-                    suggestions={suggestions}
-                    onSelect={(suggestion) => {
-                        setLocation(suggestion.display_name)
-                        setLat(suggestion.lat)
-                        setLon(suggestion.lon)
-                        setShowSuggestions(false)
-                    }}
+        <form className="grid grid-cols-[1fr_auto] border-y border-current/30" onSubmit={handleSubmit}>
+          <div className="text-sm text-[var(--ink-soft)] relative border-current/30">
+            <div className="grid grid-cols-[2fr_1fr_1fr] text-sm text-[var(--ink-soft)] relative border-current/30 divide-x">
+              <div className="relative text-sm text-[var(--ink-soft)] p-5 border-current/30 ">
+                <Label htmlFor="location" className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
+                  <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">1</span>{errorLocation ? <span className="text-red-500">{errorLocation}</span> : "Where"}<sup>(*)</sup>
+                </Label>
+                <Input 
+                  name="location" 
+                  id="location" 
+                  value={location}
+                  onChange={(e) => fetchSuggestions(e.target.value)}
+                  autoComplete="off"
+                  placeholder="Enter city or location" 
+                  className="p-0 border-0 rounded-none text-3xl! focus:outline-none focus:ring-0!" 
                 />
-            )}
+                {showSuggestions && (
+                    <LocationSuggestions
+                        suggestions={suggestions}
+                        onSelect={(suggestion) => {
+                            setLocation(suggestion.display_name)
+                            setLat(suggestion.lat)
+                            setLon(suggestion.lon)
+                            setShowSuggestions(false)
+                        }}
+                    />
+                )}
+              </div>
+              <div className="text-[var(--ink-soft)] p-5 border-current/30">
+                <Label htmlFor="startDate" className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
+                  <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">2</span>{errorDate ? <span className="text-red-500">{errorDate}</span> : "From"}<sup>(*)</sup>
+                </Label>
+                <DatePicker
+                  value={startDate}
+                  onChange={setStartDate}
+                  label="From"
+                  minDate={currentDate}
+                  maxDate={maxDate}
+                />
+              </div>
+              <div className={"text-[var(--ink-soft)] p-5" + (!startDate ? " opacity-20" : "")}>
+                <Label htmlFor="endDate" className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
+                  <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">3</span>Until
+                </Label>
+                <DatePicker
+                    value={endDate}
+                    onChange={setEndDate}
+                    label="Until"
+                    minDate={startDate ?? currentDate}
+                    maxDate={maxDate}
+                    disabled={!startDate}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-[1fr_1fr] text-[var(--ink-soft)] relative border-current/30 divide-x border-t">
+              <div className="text-[var(--ink-soft)] p-5 border-current/30 flex gap-4">
+                <Label className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
+                  <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">4</span>Wardrobe
+                </Label>
+                <Select value={wardrobe} onValueChange={setWardrobe}>
+                  <SelectTrigger className="p-0 border-0 rounded-none focus:outline-none focus:ring-0! h-auto shadow-none self-end text-3xl! ">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="unisex" className="text-xl! focus:bg-[var(--paper)]">Unisex</SelectItem>
+                    <SelectItem value="women" className="text-xl! focus:bg-[var(--paper)]">Women&apos;s</SelectItem>
+                    <SelectItem value="men" className="text-xl! focus:bg-[var(--paper)]">Men&apos;s</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="text-sm text-[var(--ink-soft)] p-5 flex gap-4">
+                <Label className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
+                  <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">5</span>Style
+                </Label>
+                <Select value={style} onValueChange={setStyle}>
+                  <SelectTrigger className="p-0 border-0 rounded-none focus:outline-none focus:ring-0! h-auto shadow-none self-end text-3xl! ">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="casual" className="text-xl! focus:bg-[var(--paper)]">Casual</SelectItem>
+                    <SelectItem value="smart-casual" className="text-xl! focus:bg-[var(--paper)]">Smart Casual</SelectItem>
+                    <SelectItem value="elegant" className="text-xl! focus:bg-[var(--paper)]">Elegant</SelectItem>
+                    <SelectItem value="formal" className="text-xl! focus:bg-[var(--paper)]">Formal</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div />
+            </div>
           </div>
-          <div className="text-sm text-[var(--ink-soft)] p-5 border-current/30">
-            <Label htmlFor="startDate" className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
-              <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">2</span>{errorDate ? <span className="text-red-500">{errorDate}</span> : "Start Date"}<sup>(*)</sup>
-            </Label>
-            <DatePicker
-              value={startDate}
-              onChange={setStartDate}
-              label="Start Date"
-              minDate={currentDate}
-              maxDate={maxDate}
-            />
-          </div>
-          <div className={"text-sm text-[var(--ink-soft)] p-5" + (!startDate ? " opacity-20" : "")}>
-            <Label htmlFor="endDate" className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
-              <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">3</span>End Date
-            </Label>
-            <DatePicker
-                value={endDate}
-                onChange={setEndDate}
-                label="End Date"
-                minDate={startDate ?? currentDate}
-                maxDate={maxDate}
-                disabled={!startDate}
-            />
-          </div>
-          <Button className="h-full rounded-none border-none hover:bg-accent/90 disabled:bg-accent/90 disabled:opacity-100 cursor-pointer w-full px-7 gap-3 text-base" type="submit" disabled={isLoading}>
-            <span className="inline-flex flex-col leading-[0]">
+          <Button className="h-full rounded-none border-none hover:bg-accent/90 disabled:bg-accent/90 disabled:opacity-100 cursor-pointer w-full px-7 gap-2 text-base" type="submit" disabled={isLoading}>
+            <span className="inline-flex flex-col leading-[0] text-xl">
               <span className={`relative inline-flex` + (!isLoading && ` invisible`)}>Loading...</span>
               <span className={`relative inline-flex` + (isLoading && ` invisible`)}>Style my Forecast</span>
             </span>
