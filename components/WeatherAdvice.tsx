@@ -52,7 +52,6 @@ export default function WeatherAdvice({ advice, onClear }: WeatherAdviceProps) {
                             <div>
                                 <p className="text-2xl font-bold">{day.conditions}</p>
                                 <p className="text-9xl font-bold">{averageTemp}<span className="text-[var(--accent)]">°</span></p>
-                                <p className="text-sm text-muted-foreground">{day.conditions}</p>
                             </div>
                         </div>
                         <div className="w-1/4">
