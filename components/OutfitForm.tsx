@@ -12,9 +12,7 @@ import { type WeatherAdvice as WeatherAdviceType } from '@/types/advice'
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
@@ -122,7 +120,7 @@ export default function OutfitForm() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-start px-7">
       <div className="w-full max-w-[1480px] gap-4 flex flex-col min-h-screen pb-4">
-        <header className="font-mono text-[0.65em] uppercase tracking-[0.125em] py-5 border-be flex justify-between text-[var(--ink-soft)] items-center">
+        <header className="font-mono text-[0.65em] uppercase tracking-[0.125em] py-5 border-be flex justify-between text-[var(--ink-soft)] items-center border-current/30">
           <span><span className="relative inline-flex size-2 me-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent"></span>
             <span className="relative inline-flex size-2 rounded-full bg-accent"></span>
