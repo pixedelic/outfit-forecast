@@ -59,7 +59,7 @@ export default function WeatherAdvice({ advice, onClear }: WeatherAdviceProps) {
                             <p className="mb-2 flex gap-2"><Thermometer className="stroke-[var(--accent)] inline-flex" />Temperature: {day.temp_min}°C - {day.temp_max}°C</p>
                             <p className="mb-2 flex gap-2"><Wind className="stroke-[var(--accent)] inline-flex" />Wind Speed: {day.wind_speed}</p>
                         </div>
-                        <div className="grow">
+                        <div className="w-5/12">
                             <p className="mb-2 text-2xl"><span className="uppercase font-mono text-sm tracking-[0.2em] mb-4 mt-6 text-[var(--accent)]">Recommended outfit:</span><br />{day.outfit.join(', ')}</p>
                             <p className="text-base text-[var(--accent)]">{day.tip}</p>
                         </div>
