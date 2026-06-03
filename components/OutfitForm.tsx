@@ -48,12 +48,18 @@ export default function OutfitForm() {
           setSuggestions([])
           return
       }
-      const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(value)}&format=json&limit=10`
-      )
-      const data = await response.json()
-      setSuggestions(data)
-      setShowSuggestions(true)
+      try {
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(value)}&format=json&limit=10`
+        )
+        if (!response.ok) return
+
+        const data = await response.json()
+        setSuggestions(data)
+        setShowSuggestions(true)
+      } catch {
+        setSuggestions([])
+      }
   }
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
@@ -98,9 +104,18 @@ export default function OutfitForm() {
       }
 
       const data = await response.json()
-      setAdvice(JSON.parse(data.advice))
+      const parsedAdvice = typeof data.advice === 'string'
+        ? JSON.parse(data.advice)
+        : data.advice
+
+      if (!parsedAdvice?.days?.length) {
+        throw new Error('The AI response was not valid. Please try again.')
+      }
+
+      setAdvice(parsedAdvice)
     } catch(err) {
-      setErrorLoading(`Something went wrong while loading: ${err}`)
+      const message = err instanceof Error ? err.message : 'Something went wrong'
+      setErrorLoading(`Something went wrong while loading: ${message}`)
     } finally {
       setIsLoading(false)
     }

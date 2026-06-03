@@ -66,6 +66,18 @@ export default function WeatherAdvice({ advice, onClear }: WeatherAdviceProps) {
                 </div>
             )
         })}
+        {advice.general_tips.length > 0 && (
+            <section className="border border-[var(--rule-strong)] rounded-lg p-6 mb-8">
+                <h2 className="uppercase font-mono text-sm tracking-[0.2em] mb-4 text-[var(--accent)]">General tips</h2>
+                <ul className="grid gap-4 md:grid-cols-2">
+                    {advice.general_tips.map((tip) => (
+                        <li key={tip} className="text-lg text-[var(--ink-soft)]">
+                            {tip}
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        )}
     </div>
     )
 }
