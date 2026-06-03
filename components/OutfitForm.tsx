@@ -118,28 +118,28 @@ export default function OutfitForm() {
   }, [])
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start px-7">
+    <div className="min-h-screen flex flex-col items-center justify-start px-4 md:px-7">
       <div className="w-full max-w-[1480px] gap-4 flex flex-col min-h-screen pb-4">
         <header className="font-mono text-[0.65em] uppercase tracking-[0.125em] py-5 border-be flex justify-between text-[var(--ink-soft)] items-center border-current/30">
-          <span><span className="relative inline-flex size-2 me-2">
+          <span className="max-md:hidden"><span className="relative inline-flex size-2 me-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent"></span>
             <span className="relative inline-flex size-2 rounded-full bg-accent"></span>
           </span>Live forecast desk</span>
           <span className="rounded-full me-2 bg-[var(--paper)] border border-[var(--rule-strong)] px-2 py-1">A Pixedelic Project</span>
-          <span>{today}</span>
+          <span className="max-md:hidden">{today}</span>
         </header>
-        <div className="flex py-7 justify-between">
+        <div className="flex max-md:flex-col py-7 justify-between gap-7">
           <h1 className="text-[clamp(64px,11vw,168px)] text-gray-900 leading-[0.88]">
-            Wear <span className="text-accent font-bold">u</span><br />going<span className="text-accent font-bold">?</span>
+            Wear <span className="text-accent font-bold">u</span> <span className="max-md:hidden"><br /></span>going<span className="text-accent font-bold">?</span>
           </h1>
-          <p className="max-w-[36ch] self-end">
+          <p className="md:max-w-[36ch] self-end">
             A weather-aware <strong>outfit dossier</strong>. Type where you&apos;re going, pick the days, get a styled look the sky won&apos;t ruin.
           </p>
         </div>
-        <form className="grid grid-cols-[1fr_auto] border-y border-current/30" onSubmit={handleSubmit}>
+        <form className="xl:grid xl:grid-cols-[1fr_auto] border-y border-current/30" onSubmit={handleSubmit}>
           <div className="text-sm text-[var(--ink-soft)] relative border-current/30">
-            <div className="grid grid-cols-[2fr_1fr_1fr] text-sm text-[var(--ink-soft)] relative border-current/30 divide-x">
-              <div className="relative text-sm text-[var(--ink-soft)] p-5 border-current/30 ">
+            <div className="grid grid-cols-2 xl:grid-cols-4 text-sm text-[var(--ink-soft)] relative border-current/30 xl:divide-x">
+              <div className="relative text-sm text-[var(--ink-soft)] p-5 border-current/30 col-span-2">
                 <Label htmlFor="location" className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
                   <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">1</span>{errorLocation ? <span className="text-red-500">{errorLocation}</span> : "Where"}<sup>(*)</sup>
                 </Label>
@@ -164,7 +164,7 @@ export default function OutfitForm() {
                     />
                 )}
               </div>
-              <div className="text-[var(--ink-soft)] p-5 border-current/30">
+              <div className="text-[var(--ink-soft)] p-5 border-current/30 col-span-1 max-sm:col-span-2 max-xl:border-t sm:max-xl:border-r">
                 <Label htmlFor="startDate" className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
                   <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">2</span>{errorDate ? <span className="text-red-500">{errorDate}</span> : "From"}<sup>(*)</sup>
                 </Label>
@@ -176,7 +176,7 @@ export default function OutfitForm() {
                   maxDate={maxDate}
                 />
               </div>
-              <div className={"text-[var(--ink-soft)] p-5" + (!startDate ? " opacity-20" : "")}>
+              <div className={"text-[var(--ink-soft)] p-5 col-span-1 max-sm:col-span-2 max-xl:border-t" + (!startDate ? " opacity-20 border-current" : " border-current/30")}>
                 <Label htmlFor="endDate" className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
                   <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">3</span>Until
                 </Label>
@@ -190,8 +190,8 @@ export default function OutfitForm() {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-[1fr_1fr] text-[var(--ink-soft)] relative border-current/30 divide-x border-t">
-              <div className="text-[var(--ink-soft)] p-5 border-current/30 flex gap-4">
+            <div className="grid grid-cols-[1fr_1fr] text-[var(--ink-soft)] relative border-current/30 sm:divide-x max-sm:divide-y border-t">
+              <div className="text-[var(--ink-soft)] p-5 border-current/30 xl:flex gap-4 max-sm:col-span-2">
                 <Label className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
                   <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">4</span>Wardrobe
                 </Label>
@@ -206,7 +206,7 @@ export default function OutfitForm() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="text-sm text-[var(--ink-soft)] p-5 flex gap-4">
+              <div className="text-sm text-[var(--ink-soft)] p-5 xl:flex gap-4 max-sm:col-span-2">
                 <Label className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4">
                   <span className="w-5 h-5 bg-black rounded-full flex items-center justify-center text-white">5</span>Style
                 </Label>
@@ -222,10 +222,9 @@ export default function OutfitForm() {
                   </SelectContent>
                 </Select>
               </div>
-              <div />
             </div>
           </div>
-          <Button className="h-full rounded-none border-none hover:bg-accent/90 disabled:bg-accent/90 disabled:opacity-100 cursor-pointer w-full px-7 gap-2 text-base" type="submit" disabled={isLoading}>
+          <Button className="h-full rounded-none border-none hover:bg-accent/90 disabled:bg-accent/90 disabled:opacity-100 cursor-pointer w-full px-7 gap-2 text-base max-xl:py-9" type="submit" disabled={isLoading}>
             <span className="inline-flex flex-col leading-[0] text-xl">
               <span className={`relative inline-flex` + (!isLoading && ` invisible`)}>Loading...</span>
               <span className={`relative inline-flex` + (isLoading && ` invisible`)}>Style my Forecast</span>
@@ -254,7 +253,7 @@ export default function OutfitForm() {
         )}
         <footer className="font-mono text-[0.65em] uppercase tracking-[0.125em] p-5 border-be border-current/30 flex justify-between text-[var(--ink-soft)] items-center bg-[var(--primary)] rounded-lg text-[var(--paper)] mt-auto">
           <span>© Pixedelic · 2026</span>
-          <span>No trends. No influencers. Just the sky.</span>
+          <span className="max-md:hidden">No trends. No influencers. Just the sky.</span>
         </footer>
       </div>
     </div>

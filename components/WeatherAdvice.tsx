@@ -36,29 +36,29 @@ export default function WeatherAdvice({ advice, onClear }: WeatherAdviceProps) {
             const averageTemp = ((day.temp_max + day.temp_min) / 2).toFixed(0)
             return (
                 <div key={day.date} className="mb-8">
-                    <div className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4 mt-6 text-[var(--accent)] justify-between flex items-center">
-                        <div>
+                    <div className="uppercase font-mono text-[0.75em] tracking-[0.2em] mb-4 mt-6 text-[var(--accent)] justify-between flex max-md:flex-col gap-4 items-center">
+                        <div className="max-md:order-2">
                             ({index + 1}) {day.location} - {date}
                         </div>
                         { index === 0 && (
-                            <button onClick={onClear} aria-label="Clear advices" className="bg-[var(--accent)] rounded-full transition-all active:scale-97 cursor-pointer text-[var(--paper)] tracking-[0] flex items-center justify-center py-2 px-4 gap-2">
+                            <button onClick={onClear} aria-label="Clear advices" className="bg-[var(--accent)] rounded-full transition-all active:scale-97 cursor-pointer text-[var(--paper)] tracking-[0] flex items-center justify-center py-2 px-4 gap-2  max-md:order-1">
                                 <Ban className="w-4 h-4 stroke-[var(--paper)]" /> Clear advices 
                             </button>
                         )}
                     </div>
-                    <div className="border border-[var(--rule-strong)] rounded-lg p-6 flex justify-between items-center gap-8">
-                        <div className="flex items-center gap-4 mb-2 w-1/3">
+                    <div className="grid grid-cols-2 lg:grid-cols-[4fr_3fr_5fr] border border-[var(--rule-strong)] rounded-lg p-6 items-center gap-8">
+                        <div className="flex items-center gap-4 mb-2 max-md:col-span-2">
                             <Icon className="w-24 h-24 text-[var(--accent)]" />
                             <div>
                                 <p className="text-2xl font-bold">{day.conditions}</p>
-                                <p className="text-9xl font-bold">{averageTemp}<span className="text-[var(--accent)]">°</span></p>
+                                <p className="text-7xl md:text-9xl font-bold">{averageTemp}<span className="text-[var(--accent)]">°</span></p>
                             </div>
                         </div>
-                        <div className="w-1/4">
+                        <div className="max-md:col-span-2">
                             <p className="mb-2 flex gap-2"><Thermometer className="stroke-[var(--accent)] inline-flex" />Temperature: {day.temp_min}°C - {day.temp_max}°C</p>
                             <p className="mb-2 flex gap-2"><Wind className="stroke-[var(--accent)] inline-flex" />Wind Speed: {day.wind_speed}</p>
                         </div>
-                        <div className="w-5/12">
+                        <div className="max-lg:col-span-2">
                             <p className="mb-2 text-2xl"><span className="uppercase font-mono text-sm tracking-[0.2em] mb-4 mt-6 text-[var(--accent)]">Recommended outfit:</span><br />{day.outfit.join(', ')}</p>
                             <p className="text-base text-[var(--accent)]">{day.tip}</p>
                         </div>
